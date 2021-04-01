@@ -1,0 +1,16 @@
+{
+  "prettier.eslintIntegration": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.format.enable": true,
+  "eslint.run": "onType",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "graphql",
+    "markdown",
+    "css"
+  ]
+}

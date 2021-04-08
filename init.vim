@@ -10,6 +10,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -85,7 +86,20 @@ nmap <Leader>s :Rg <cword><CR>
 " COC config
 "
 " Install extensions
-let g:coc_global_extensions = ['coc-json', 'coc-prettier', 'coc-eslint', 'coc-yaml', 'coc-vetur', 'coc-tsserver', 'coc-css']
+let g:coc_global_extensions = [
+ \ 'coc-json',
+ \ 'coc-yaml',
+ \ 'coc-vetur',
+ \ 'coc-tsserver',
+ \ 'coc-css'
+ \ ]
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -135,10 +149,12 @@ inoremap <silent><expr> <c-space> coc#refresh()
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> <Leader>E <Plug>(coc-diagnostic-prev)
+nmap <silent> <Leader>e <Plug>(coc-diagnostic-next)
+nmap <silent> <Leader>ee :CocDiagnostics<Cr>
+" Autofix an issue
+nmap <leader>do <Plug>(coc-codeaction)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -156,3 +172,6 @@ command! -nargs=0 Format :call CocAction('format')
 " Add `:Fold` command to fold current buffer.
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 nmap <Leader>p :Format<Cr>
+nnoremap <silent> <Leader>? :call CocActionAsync('doHover')<CR>
+
+autocmd User CoCNvimInit

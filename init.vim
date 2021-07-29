@@ -72,6 +72,7 @@ nmap <Leader>h :nohl<cr>
 nmap <Leader>w :w<cr>
 nmap <Leader>c :q<cr>
 nmap <Leader>z ZZ
+nmap <Leader>g :Git<cr>
 nmap <Leader>d yyp
 nnoremap <C-n> :set invrnu<cr>
 nnoremap j gj
@@ -170,8 +171,18 @@ nmap <leader>rn <Plug>(coc-rename)
 command! -nargs=0 Format :call CocAction('format')
 
 " Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
 nmap <Leader>p :Format<Cr>
 nnoremap <silent> <Leader>? :call CocActionAsync('doHover')<CR>
 
+function OrganizeAndFormat()
+  :silent! OR
+  :silent! Format
+endfunction
+
 autocmd User CoCNvimInit
+autocmd BufWritePre *.ts,*.js,*.tsx,*.jsx :call OrganizeAndFormat()
